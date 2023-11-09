@@ -11,7 +11,7 @@
         <div class="col-lg-8 col-md-10 col-sm-12">
           <form id="form-modify" method="POST" action="">
           	<input type="hidden" name="action" value="modify">
-          	<input type="hidden" name="articleno" value="${article.articleNo}">
+          	<input type="hidden" name="articleNo" value="${article.articleNo}">
             <div class="mb-3">
               <label for="subject" class="form-label">제목 : </label>
               <input type="text" class="form-control" id="subject" name="subject" value="${article.subject}" />
@@ -42,7 +42,7 @@
           return;
         } else {
           let form = document.querySelector("#form-modify");
-          form.setAttribute("action", "${root}/article");
+          form.setAttribute("action", "${root}/board/modify");
           form.submit();
         }
       });

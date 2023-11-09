@@ -12,6 +12,7 @@
         <div class="col-lg-8 col-md-10 col-sm-12">
           <form id="form-register" method="POST" action="">
           	<input type="hidden" name="action" value="write">
+          	<input type="hidden" name=userId value="${userInfo.userId }">
             <div class="mb-3">
               <label for="subject" class="form-label">제목 : </label>
               <input

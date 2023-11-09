@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//@RestController
-@RequestMapping("/board")
+@RestController
+@RequestMapping("/api/board")
 public class BoardRestController {
     final private BoardService boardService;
 

@@ -18,7 +18,7 @@
 
     <insert id="boardWrite" parameterType="BoardDto">
         insert into board (user_id, subject, content)
-        values (#{user_id}, #{subject}, #{content})
+        values (#{userId}, #{subject}, #{content})
     </insert>
 
     <select id="boardList" resultMap="boardMap" parameterType="map">

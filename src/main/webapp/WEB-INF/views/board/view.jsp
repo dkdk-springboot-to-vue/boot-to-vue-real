@@ -115,7 +115,7 @@
 					"click",
 					function() {
 						alert("글삭제");
-						location.href = "${root}/board/delete${article.articleNo}";
+						location.href = "${root}/board/delete/${article.articleNo}";
 					});
 
 	/* 	document

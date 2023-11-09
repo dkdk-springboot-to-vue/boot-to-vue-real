@@ -52,8 +52,9 @@ public class BoardController {
     @PostMapping("/write")
     public String write(BoardDto boardDto, RedirectAttributes redirectAttributes) throws Exception {
         // Save the new article using the service
+    	System.out.println("in###");
+    	System.out.println(boardDto);
         boardService.writeArticle(boardDto);
-
         // Redirect to the list page
         redirectAttributes.addFlashAttribute("message", "Article created successfully!");
         return "redirect:/board/list";
@@ -69,11 +70,12 @@ public class BoardController {
 
     @PostMapping("/modify")
     public String modify(@ModelAttribute BoardDto boardDto) throws Exception {
+    	System.out.println(boardDto);
         boardService.modifyArticle(boardDto);
-        return "redirect:/";
+        return "redirect:/board/list";
     }
 
-    @GetMapping("/delect/{articleNo}")
+    @GetMapping("/delete/{articleNo}")
     public String delete(@PathVariable("articleNo") String articleNo) throws Exception {
         boardService.deleteArticle(Integer.parseInt(articleNo));
         return "redirect:/";

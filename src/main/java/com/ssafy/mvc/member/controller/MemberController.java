@@ -101,7 +101,7 @@ public class MemberController {
 			MemberDto loginDto = service.login(dto);
 			System.out.println(loginDto);
 			if(loginDto != null) {
-				request.getSession().setAttribute("userInfo", loginDto.getUserId());
+				request.getSession().setAttribute("userInfo", loginDto);
 				mav.setViewName("index");
 			} else {
 				mav.setViewName("redirect:/user/loginForm");

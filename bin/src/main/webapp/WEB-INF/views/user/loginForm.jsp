@@ -15,15 +15,15 @@
 	<%-- 페이지만의 내용 --%>
 	<div class="container p-4">
 		<h2>로그인</h2>
-		<form action="${root}/user?action=login" method="post">
+		<form action="${root}/member/login" method="post">
 			<input type="hidden" name="action" value="login"> 
 			<div class="form-group">
 				<label for="id">id:</label> <input type="text" class="form-control"
-					id="id" name="id" placeholder="ID 입력" value="">
+					id="id" name="userId" placeholder="ID 입력" value="">
 			</div>
 			<div class="form-group">
 				<label for="pw">Password:</label> <input type="password"
-					class="form-control" id="pw" name="pw" placeholder="비밀번호 입력">
+					class="form-control" id="pw" name="userPass" placeholder="비밀번호 입력">
 			</div>
 			<div class="form-group form-check">
 				<label class="form-check-label"> <input
@@ -32,7 +32,7 @@
 				</label>
 			</div>
 			<button type="submit" class="btn btn-primary">로그인</button>
-			<a class="btn btn-secondary" href="${root}/user?action=registerform">회원가입</a>
-			<a class="btn btn-secondary" href="${root}/user?action=findform">비밀번호 찾기</a>
+			<a class="btn btn-secondary" href="${root}/member/regist">회원가입</a>
+			<a class="btn btn-secondary" href="${root}/member/findpw">비밀번호 찾기</a>
 		</form>
 	</div>
