@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ssafy.mvc.board.repository.BoardRepository">
+
+    <resultMap type="boardDto" id="boardMap">
+        <result column="article_no" property="articleNo"/>
+        <result column="user_id" property="userId"/>
+        <result column="subject" property="subject"/>
+        <result column="content" property="content"/>
+        <result column="hit" property="hit"/>
+        <result column="register_time" property="registerTime"/>
+    </resultMap>
+
+
+    <insert id="boardWrite" parameterType="BoardDto">
+        insert into board (user_id, subject, content)
+        values (#{user_id}, #{subject}, #{content})
+    </insert>
+
+    <select id="boardList" resultMap="boardMap" parameterType="map">
+        select article_no, user_id, subject, content, hit, register_time
+        from board
+        <where>
+            <if test="key != null and word != null">
+                <choose>
+                    <when test="key.equals('subject')">
+                        and subject like concat('%', #{word}, '%')
+                    </when>
+                    <otherwise>
+                        and ${key} = #{word}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        order by article_no desc
+        limit #{start}, #{listsize}
+    </select>
+
+    <select id="boardCount" resultType="int" parameterType="map">
+        select count(article_no)
+        from board
+        <where>
+            <if test="key != null and word != null">
+                <choose>
+                    <when test="key.equals('subject')">
+                        and subject like concat('%', #{word}, '%')
+                    </when>
+                    <otherwise>
+                        and ${key} = #{word}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="getArticle" resultMap="boardMap" parameterType="int">
+        select article_no, board.user_id, subject, content, hit, register_time, reply_content, reply.user_id
+        from board left join reply using(article_no)
+        where article_no = #{articleNo}
+    </select>
+
+    <update id="updateHit" parameterType="int">
+        update board
+        set hit = hit + 1
+        where article_no = #{articleNo}
+    </update>
+
+    <update id="modifyArticle" parameterType="BoardDto">
+        update board
+        set subject = #{subject}, content = #{content}
+        where article_no = #{articleNo}
+    </update>
+
+    <delete id="deleteArticle" parameterType="int">
+        delete from board
+        where article_no = #{articleNo}
+    </delete>
+
+    <insert id="addReply" parameterType="ReplyDto">
+        insert into reply (article_no, reply_content, user_id)
+        values (#{articleNo}, #{replyCotent}, #{userId})
+    </insert>
+
+</mapper>

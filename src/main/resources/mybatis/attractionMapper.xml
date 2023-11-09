@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ssafy.mvc.attraction.repository.AttractionRepository">
+
+<select id="getSidoList" resultType="SidoDto">
+	select sido_code, sido_name
+	from sido
+</select>
+	
+<select id="getGugunList" parameterType="int" resultType="GugunDto">
+	select gugun_code, gugun_name, sido_code
+	from gugun
+	where sido_code = #{sido_code}
+</select>
+
+<select id="getAttractionList" parameterType="int" resultType="AttractionDto">
+	select content_id, content_type_id, title, addr1, zipcode, tel, 
+		   first_image, first_image2, readcount, sido_code, gugun_code, 
+		   latitude, longitude, mlevel
+	from attraction_info
+	where gugun_code = #{gugun_code} and sido_code = #{sido_code}
+</select> 
+	
+</mapper>
