@@ -3,9 +3,12 @@
 <template>
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <router-link :to="{ name: 'main' }" class="nav-link">홈</router-link>
+      </li>
       <li class="nav-item"><a class="nav-link" href=""> map </a></li>
       <li class="nav-item"><a class="nav-link" href=""> user </a></li>
-      <li class="nav-item"><a class="nav-link" href=""> board </a></li>
+      <router-link :to="{ name: 'board' }" class="nav-link">board</router-link>
     </ul>
     <!-- <c:choose> -->
     <!-- session에 값이 없다면 로그인이 안됐다 !  -->
