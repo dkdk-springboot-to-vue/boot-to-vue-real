@@ -1,10 +1,10 @@
 package com.ssafy.mvc.member.dto;
 
-public class MemberDto {
-	String userId;
-	String userName;
-	String userPass;
-	String userJoinDate;
+	public class MemberDto {
+		String userId;
+		String userName;
+		String userPass;
+		String userJoinDate;
 	
 	public String getUserId() {
 		return userId;

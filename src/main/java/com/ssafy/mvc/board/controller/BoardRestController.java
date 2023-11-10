@@ -56,6 +56,7 @@ public class BoardRestController {
 
     @PostMapping("/reply")
     public Map<String, Object> reply(@RequestBody ReplyDto replyDto) throws Exception{
+    	System.out.println("============ : "+replyDto);
         Map<String, Object> map = new HashMap<>();
         boardService.addReply(replyDto);
         return map;

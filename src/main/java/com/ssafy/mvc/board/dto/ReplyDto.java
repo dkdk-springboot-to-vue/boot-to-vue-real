@@ -69,6 +69,11 @@ public class ReplyDto {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	@Override
+	public String toString() {
+		return "ReplyDto [replyNo=" + replyNo + ", articleNo=" + articleNo + ", replyCotent=" + replyCotent
+				+ ", userId=" + userId + "]";
+	}
 	
 	
 	
