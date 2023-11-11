@@ -1,4 +1,39 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { listArticle } from "@/api/board";
+
+import BoardListItem from "@/components/board/item/BoardListItem.vue";
+
+const articles = ref([]);
+
+const param = ref({
+  pgno: 1,
+  key: "subject",
+  word: "d",
+});
+
+onMounted(() => {
+  getArticleList();
+});
+
+const getArticleList = () => {
+  console.log("글 목록 얻어오기", param.value);
+  // API 호출
+  listArticle(
+    param.value,
+    ({ data }) => {
+      console.log("data : " + data);
+      //   articles.value = data;
+      articles.value = data;
+      console.log(articles.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+</script>
 
 <template>
   <div class="row justify-content-center">
@@ -15,7 +50,6 @@
           </button>
         </div>
         <div class="col-md-7 offset-3">
-          기
           <form class="d-flex" id="form-search" action="">
             <input type="hidden" name="action" value="list" />
             <input type="hidden" name="pgno" value="1" />
@@ -54,28 +88,12 @@
           </tr>
         </thead>
         <tbody>
-          <c:forEach var="article" items="${articles}">
-            <tr class="text-center">
-              <th scope="row">${article.articleNo}</th>
-              <td class="text-start">
-                <a
-                  href="#"
-                  class="article-title link-dark"
-                  data-no="${article.articleNo}"
-                  style="text-decoration: none"
-                >
-                  ${article.subject}
-                </a>
-              </td>
-              <td>${article.userId}</td>
-              <td>${article.hit}</td>
-              <td>${article.registerTime}</td>
-            </tr>
-          </c:forEach>
+          <BoardListItem v-for="article in articles" :key="article.acticleNo" :article="article">
+          </BoardListItem>
         </tbody>
       </table>
     </div>
-    <div class="row">${navigation.navigator}</div>
+    <!-- <div class="row">${navigation.navigator}</div> -->
   </div>
 </template>
 
