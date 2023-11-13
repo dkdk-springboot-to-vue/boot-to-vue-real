@@ -11,8 +11,8 @@ const articles = ref([]);
 
 const param = ref({
   pgno: 1,
-  key: "subject",
-  word: "d",
+  key: "",
+  word: "",
 });
 
 onMounted(() => {
@@ -83,7 +83,9 @@ const moveWrite = () => {
                 class="form-control"
                 placeholder="검색어..."
               />
-              <button id="btn-search" class="btn btn-dark" type="button">검색</button>
+              <button id="btn-search" class="btn btn-dark" type="button">
+                검색
+              </button>
             </div>
           </form>
         </div>
@@ -99,7 +101,11 @@ const moveWrite = () => {
           </tr>
         </thead>
         <tbody>
-          <BoardListItem v-for="article in articles" :key="article.acticleNo" :article="article">
+          <BoardListItem
+            v-for="article in articles"
+            :key="article.acticleNo"
+            :article="article"
+          >
           </BoardListItem>
         </tbody>
       </table>
