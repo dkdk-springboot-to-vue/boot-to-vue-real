@@ -24,17 +24,16 @@
     <select id="boardList" resultMap="boardMap" parameterType="map">
         select article_no, user_id, subject, content, hit, register_time
         from board
+        where 1=1
         <where>
-            <if test="key != null and word != null">
-                <choose>
-                    <when test="key.equals('subject')">
-                        and subject like concat('%', #{word}, '%')
-                    </when>
-                    <otherwise>
-                        and ${key} = #{word}
-                    </otherwise>
-                </choose>
-            </if>
+		<if test="word != null and word != ''">
+			<if test="key == 'subject'">
+				and subject like concat('%', #{word}, '%')
+			</if>
+			<if test="key != 'subject'">
+				and ${key} = #{word}
+			</if>
+		</if>
         </where>
         order by article_no desc
         limit #{start}, #{listsize}
