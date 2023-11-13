@@ -27,6 +27,35 @@ const router = createRouter({
         },
       ],
     },
+
+    {
+      path: "/member",
+      name: "member",
+      component: () => import("../views/TheMemberView.vue"),
+      redirect: { name: "member-register" },
+      children: [
+        {
+          path: "register",
+          name: "member-register",
+          component: () => import("@/components/member/MemberRegister.vue"),
+        },
+        {
+          path: "login",
+          name: "member-login",
+          component: () => import("@/components/member/MemberLogin.vue"),
+        },
+        {
+          path: "logined",
+          name: "member-logined",
+          component: () => import("@/components/member/MemberLogined.vue"),
+        },
+        {
+          path: "find",
+          name: "member-find",
+          component: () => import("@/components/member/MemberFind.vue"),
+        },
+      ],
+    },
   ],
 });
 

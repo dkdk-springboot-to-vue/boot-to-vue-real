@@ -14,14 +14,14 @@
     <!-- session에 값이 없다면 로그인이 안됐다 !  -->
     <!-- <c:when test="${empty userInfo}"> -->
     <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link" href="${root}/member/login">로그인</a></li>
-      <li class="nav-item"><a class="nav-link" href="${root}/member/regist">회원가입</a></li>
+      <li class="nav-item"><router-link :to="{ name: 'member-login' }" class="nav-link">로그인</router-link></li>
+      <li class="nav-item"><router-link :to="{ name: 'member' }" class="nav-link">회원가입</router-link></li>
     </ul>
     <!-- </c:when> -->
-    <!-- session에 값이 있다면 로그인 됬다 !  -->
+    <!-- session에 값이 있다면 로그인 됐다 !  -->
     <!-- <c:otherwise> -->
     <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link disabled">${userInfo}님 반갑습니다.</a></li>
+      <li class="nav-item"><a class="nav-link disabled"> {{ userId }}님 반갑습니다.</a></li>
       <li class="nav-item"><a class="nav-link" href="${root}/member/logout">로그아웃</a></li>
     </ul>
     <!-- </c:otherwise> -->
