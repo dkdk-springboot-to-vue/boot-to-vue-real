@@ -4,6 +4,8 @@ import com.ssafy.mvc.board.dto.BoardDto;
 import com.ssafy.mvc.board.dto.ReplyDto;
 import com.ssafy.mvc.board.service.BoardService;
 
+import io.swagger.annotations.ApiParam;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,7 +56,7 @@ public class BoardRestController {
 		}
     }
 
-    @PostMapping("/modify")
+    @PutMapping("/modify")
     public Map<String, Object> getModify(@RequestBody BoardDto boardDto) throws Exception {
         Map<String, Object> map = new HashMap<>();
         boardService.modifyArticle(boardDto);
@@ -76,10 +78,15 @@ public class BoardRestController {
 //    }
 
     @PostMapping("/write")
-    public Map<String, Object> write(@RequestBody BoardDto boardDto) throws Exception{
-        Map<String, Object> map = new HashMap<>();
-        boardService.writeArticle(boardDto);
-        return map;
+    public ResponseEntity<?> write(@RequestBody BoardDto boardDto) {
+        
+        try {
+			boardService.writeArticle(boardDto);
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return exceptionHandling(e);
+		}
     }
 
     @PostMapping("/reply")
@@ -89,7 +96,12 @@ public class BoardRestController {
         boardService.addReply(replyDto);
         return map;
     }
-
+    
+    @DeleteMapping("/{articleno}")
+	public ResponseEntity<String> deleteArticle(@PathVariable("articleno") int articleno) throws Exception {
+		boardService.deleteArticle(articleno);
+		return ResponseEntity.ok().build();
+	}
 
     //  아래는 ----- form으로 만 이동
 //    @GetMapping("/write")

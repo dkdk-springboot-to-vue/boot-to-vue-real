@@ -5,6 +5,8 @@ import { listArticle } from "@/api/board";
 
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
 
+const router = useRouter();
+
 const articles = ref([]);
 
 const param = ref({
@@ -33,6 +35,10 @@ const getArticleList = () => {
     }
   );
 };
+
+const moveWrite = () => {
+  router.push({ name: "article-write" });
+};
 </script>
 
 <template>
@@ -45,7 +51,12 @@ const getArticleList = () => {
     <div class="col-lg-8 col-md-10 col-sm-12">
       <div class="row align-self-center mb-2">
         <div class="col-md-2 text-start">
-          <button type="button" id="btn-mv-register" class="btn btn-outline-primary btn-sm">
+          <button
+            type="button"
+            id="btn-mv-register"
+            class="btn btn-outline-primary btn-sm"
+            @click="moveWrite"
+          >
             글쓰기
           </button>
         </div>

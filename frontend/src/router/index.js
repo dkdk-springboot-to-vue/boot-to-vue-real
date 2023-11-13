@@ -25,6 +25,16 @@ const router = createRouter({
           name: "article-view",
           component: () => import("@/components/board/BoardDetail.vue"),
         },
+        {
+          path: "write",
+          name: "article-write",
+          component: () => import("@/components/board/BoardWrite.vue"),
+        },
+        {
+          path: "modify/:articleno",
+          name: "article-modify",
+          component: () => import("@/components/board/BoardModify.vue"),
+        },
       ],
     },
   ],

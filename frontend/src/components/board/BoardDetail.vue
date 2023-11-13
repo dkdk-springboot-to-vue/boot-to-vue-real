@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { detailArticle } from "@/api/board";
+import { deleteArticle } from "@/api/board";
 
 const route = useRoute();
 const router = useRouter();
@@ -19,6 +20,25 @@ const getArticle = () => {
   detailArticle(articleno, ({ data }) => {
     console.log(data);
     article.value = data;
+  });
+};
+
+const moveModify = () => {
+  router.push({ name: "article-modify", params: { articleno } });
+};
+
+function moveList() {
+  router.push({ name: "article-list" });
+}
+
+const onDeleteArticle = () => {
+  // const { articleno } = route.params;
+  console.log(articleno + "번글 삭제하러 가자!!!");
+  // API 호출
+  deleteArticle(articleno, ({ data }) => {
+    console.log(data);
+    article.value = data;
+    moveList();
   });
 };
 </script>
@@ -68,10 +88,20 @@ const getArticle = () => {
           <button type="button" id="btn-list" class="btn btn-outline-primary mb-3">글목록</button>
 
           <c:if test="${userInfo.userId eq article.userId}">
-            <button type="button" id="btn-mv-modify" class="btn btn-outline-success mb-3 ms-1">
+            <button
+              type="button"
+              id="btn-mv-modify"
+              class="btn btn-outline-success mb-3 ms-1"
+              @click="moveModify"
+            >
               글수정
             </button>
-            <button type="button" id="btn-delete" class="btn btn-outline-danger mb-3 ms-1">
+            <button
+              type="button"
+              id="btn-delete"
+              class="btn btn-outline-danger mb-3 ms-1"
+              @click="onDeleteArticle"
+            >
               글삭제
             </button>
           </c:if>
