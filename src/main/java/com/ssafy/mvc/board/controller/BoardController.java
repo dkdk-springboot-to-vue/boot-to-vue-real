@@ -29,8 +29,8 @@ public class BoardController {
         map1.put("pgno", "1");
         map1.put("key", "1");
         map1.put("word", "1");
-        List<BoardDto> articles = boardService.listArticle(map1);
-        model.addAttribute("articles", articles);
+//        List<BoardDto> articles = boardService.listArticle(map1);
+//        model.addAttribute("articles", articles);
 
         return "board/list"; // Return the name of the JSP/Thymeleaf template
     }

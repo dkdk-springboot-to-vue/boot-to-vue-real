@@ -32,5 +32,13 @@ public class BoardListDto {
 		this.totalPageCount = totalPageCount;
 	}
 
+	@Override
+	public String toString() {
+		return "BoardListDto [articles=" + articles + ", currentPage=" + currentPage + ", totalPageCount="
+				+ totalPageCount + "]";
+	}
+	
+	
+
 }
 

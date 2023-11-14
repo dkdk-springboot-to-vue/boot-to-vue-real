@@ -125,10 +125,10 @@ function moveList() {
     </div>
     <div class="col-auto text-center">
       <button type="submit" id="btn-register" class="btn btn-outline-primary mb-3" v-if="isUseId">
-        글작성
+        글수정
       </button>
       <button type="submit" id="btn-register" class="btn btn-outline-primary mb-3" v-else>
-        글수정
+        글작성
       </button>
       <button type="reset" class="btn btn-outline-danger mb-3">초기화</button>
     </div>
