@@ -20,6 +20,8 @@ public interface BoardRepository {
 	BoardDto getArticle(int articleNo) throws SQLException;
 	void updateHit(int articleNo) throws SQLException;
 	
+	List<ReplyDto> listReply(int articleNo) throws SQLException;
+	
 	void modifyArticle(BoardDto boardDto) throws SQLException;
 	void deleteArticle(int articleNo) throws SQLException;
 	void addReply(ReplyDto replyDto) throws SQLException;

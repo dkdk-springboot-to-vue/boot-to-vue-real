@@ -15,17 +15,21 @@
         <result column="register_time" property="registerTime"/>
     </resultMap>
 
+    <resultMap type="ReplyDto" id="replyMap">
+        <result property="articleNo" column="article_no" />
+        <result property="replyNo" column="reply_no" />
+        <result property="replyContent" column="reply_content" />
+        <result property="userId" column="user_id" />
+    </resultMap>
+
 
     <insert id="boardWrite" parameterType="BoardDto">
         insert into board (user_id, subject, content)
         values (#{userId}, #{subject}, #{content})
     </insert>
 
-    <select id="boardList" resultMap="boardMap" parameterType="map">
-        select article_no, user_id, subject, content, hit, register_time
-        from board
-        where 1=1
-        <where>
+
+	<sql id="search">
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
 				and subject like concat('%', #{word}, '%')
@@ -34,7 +38,13 @@
 				and ${key} = #{word}
 			</if>
 		</if>
-        </where>
+	</sql>
+
+    <select id="boardList" resultMap="boardMap" parameterType="map">
+        select article_no, user_id, subject, content, hit, register_time
+        from board
+        where 1=1
+        <include refid="search"></include>
         order by article_no desc
         limit #{start}, #{listsize}
     </select>
@@ -42,23 +52,19 @@
     <select id="boardCount" resultType="int" parameterType="map">
         select count(article_no)
         from board
-        <where>
-            <if test="key != null and word != null">
-                <choose>
-                    <when test="key.equals('subject')">
-                        and subject like concat('%', #{word}, '%')
-                    </when>
-                    <otherwise>
-                        and ${key} = #{word}
-                    </otherwise>
-                </choose>
-            </if>
-        </where>
+        where 1=1
+        <include refid="search"></include>
     </select>
 
     <select id="getArticle" resultMap="boardMap" parameterType="int">
-        select article_no, board.user_id, subject, content, hit, register_time, reply_content, reply.user_id
-        from board left join reply using(article_no)
+        select article_no, user_id, subject, content, hit, register_time
+        from board
+        where article_no = #{articleNo}
+    </select>
+    
+    <select id="listReply" resultMap="replyMap" parameterType="int">
+        select article_no, user_id, reply_content, reply_no
+        from reply
         where article_no = #{articleNo}
     </select>
 
@@ -81,7 +87,7 @@
 
     <insert id="addReply" parameterType="ReplyDto">
         insert into reply (article_no, reply_content, user_id)
-        values (#{articleNo}, #{replyCotent}, #{userId})
+        values (#{articleNo}, #{replyContent}, #{userId})
     </insert>
 
 </mapper>

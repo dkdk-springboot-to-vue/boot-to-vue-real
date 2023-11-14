@@ -25,4 +25,9 @@ function modifyArticle(articleno, success, fail) {
   local.delete(`${url}/${articleno}`).then(success).catch(fail);
 }
 
-export { listArticle, detailArticle, registArticle, deleteArticle, modifyArticle };
+function registReply(reply, success, fail) {
+  console.log("boardjs reply", reply);
+  local.post(`${url}/reply`, JSON.stringify(reply)).then(success).catch(fail);
+}
+
+export { listArticle, detailArticle, registArticle, deleteArticle, modifyArticle, registReply };

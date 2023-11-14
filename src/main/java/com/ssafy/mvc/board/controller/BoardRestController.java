@@ -1,6 +1,7 @@
 package com.ssafy.mvc.board.controller;
 
 import com.ssafy.mvc.board.dto.BoardDto;
+import com.ssafy.mvc.board.dto.BoardListDto;
 import com.ssafy.mvc.board.dto.ReplyDto;
 import com.ssafy.mvc.board.service.BoardService;
 
@@ -27,29 +28,29 @@ public class BoardRestController {
         this.boardService = boardService;
     }
 
-    @GetMapping("/list/{pgno}/{key}/{word}")
-    public Map<String, Object> getList(@PathVariable("pgno") String pgno, @PathVariable("key") String key, @PathVariable("word") String word ) throws Exception {
-        Map<String, String> map1 = new HashMap<>();
-        map1.put("pgno", pgno);
-        map1.put("key", key);
-        map1.put("word", word);
-
-        Map<String, Object> map = new HashMap<>();
-        List<BoardDto> list = boardService.listArticle(map1);
-        map.put("list", list);
-
-        return map;
-    }
+//    @GetMapping("/list/{pgno}/{key}/{word}")
+//    public Map<String, Object> getList(@PathVariable("pgno") String pgno, @PathVariable("key") String key, @PathVariable("word") String word ) throws Exception {
+//        Map<String, String> map1 = new HashMap<>();
+//        map1.put("pgno", pgno);
+//        map1.put("key", key);
+//        map1.put("word", word);
+//
+//        Map<String, Object> map = new HashMap<>();
+//        List<BoardDto> list = boardService.listArticle(map1);
+//        map.put("list", list);
+//
+//        return map;
+//    }
     
     @GetMapping("/list")
     public ResponseEntity<?> getList(@RequestParam Map<String, String> map){
     	try {
     		System.out.println("conmap : "+map);
-			List<BoardDto> list = boardService.listArticle(map);
-			System.out.println("conli : "+list);
+			BoardListDto boardListDto = boardService.listArticle(map);
+			System.out.println("conli : "+boardListDto);
 			HttpHeaders header = new HttpHeaders();
 			header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-			return ResponseEntity.ok().headers(header).body(list);
+			return ResponseEntity.ok().headers(header).body(boardListDto);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			return exceptionHandling(e);

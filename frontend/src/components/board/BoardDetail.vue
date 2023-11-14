@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { detailArticle } from "@/api/board";
-import { deleteArticle } from "@/api/board";
+import { detailArticle, deleteArticle, registReply } from "@/api/board";
 
 const route = useRoute();
 const router = useRouter();
@@ -10,6 +9,12 @@ const router = useRouter();
 const { articleno } = route.params;
 
 const article = ref({});
+
+const reply = ref({
+  articleno: articleno,
+  replyContent: "",
+  userId: "test",
+});
 
 onMounted(() => {
   getArticle();
@@ -41,6 +46,42 @@ const onDeleteArticle = () => {
     moveList();
   });
 };
+
+const replyErrMsg = ref("");
+
+watch(
+  () => reply.value.replyContent,
+  (value) => {
+    let len = value.length;
+    if (len == 0 || len > 100) {
+      replyErrMsg.value = "내용을 확인해 주세요!!!";
+    } else replyErrMsg.value = "";
+  },
+  { immediate: true }
+);
+
+function onSubmit() {
+  // event.preventDefault();
+
+  if (replyErrMsg.value) {
+    alert(replyErrMsg.value);
+  } else {
+    writereply();
+  }
+}
+
+function writereply() {
+  console.log("댓글작성");
+  registReply(
+    reply.value,
+    ({ data }) => {
+      console.log("writeReply : " + data);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+}
 </script>
 
 <template>
@@ -108,33 +149,8 @@ const onDeleteArticle = () => {
         </div>
 
         <hr />
-        <h4>댓글 목록</h4>
-        <table class="table table-hover">
-          <thead>
-            <tr class="text-center">
-              <th scope="col">작성자</th>
-              <th scope="col">댓글</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- 댓글 -->
-            <!-- <c:forEach var="reply" items="${article.replies}">
-              <tr class="text-center">
-                <td>${reply.userId}</td>
-                <td>${reply.replyCotent}</td>
-              </tr>
-            </c:forEach> -->
-          </tbody>
-        </table>
-
-        <div style="height: 50px"></div>
-        <hr />
-        <div style="height: 50px"></div>
-
         <div>
-          <form method="POST" action="${root}/article/reply">
-            <input type="hidden" name="userId" value="${userInfo.userId}" />
-            <input type="hidden" name="articleNo" value="${article.articleNo}" />
+          <form @submit.prevent="onSubmit">
             <div class="mb-3">
               <label for="subject" class="form-label">댓글 작성 </label>
               <input
@@ -143,6 +159,7 @@ const onDeleteArticle = () => {
                 id="content"
                 name="replyCotent"
                 placeholder="입력하시오..."
+                v-model="reply.replyContent"
               />
             </div>
 
@@ -156,6 +173,33 @@ const onDeleteArticle = () => {
             </div>
           </form>
         </div>
+
+        <h4>댓글 목록</h4>
+        <table class="table table-hover">
+          <thead>
+            <tr class="text-center">
+              <th scope="col">작성자</th>
+              <th scope="col">댓글</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 댓글 -->
+            <tr class="text-center" v-for="reply in article.replies">
+              <td>{{ reply.userId }}</td>
+              <td>{{ reply.replyContent }}</td>
+            </tr>
+            <!-- <c:forEach var="reply" items="${article.replies}">
+              <tr class="text-center">
+                <td>${reply.userId}</td>
+                <td>${reply.replyCotent}</td>
+              </tr>
+            </c:forEach> -->
+          </tbody>
+        </table>
+
+        <div style="height: 50px"></div>
+        <hr />
+        <div style="height: 50px"></div>
       </div>
     </div>
   </div>

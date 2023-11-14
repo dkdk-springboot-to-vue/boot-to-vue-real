@@ -4,13 +4,25 @@ import { useRouter } from "vue-router";
 import { listArticle } from "@/api/board";
 
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
+import VPageNavigation from "@/components/common/VPageNavigation.vue";
+import VSelect from "@/components/common/VSelect.vue";
 
 const router = useRouter();
 
-const articles = ref([]);
+const selectOption = ref([
+  { text: "검색조건", value: "" },
+  { text: "글번호", value: "article_no" },
+  { text: "제목", value: "subject" },
+  { text: "작성자아이디", value: "user_id" },
+]);
 
+const articles = ref([]);
+const currentPage = ref(1);
+const totalPage = ref(0);
+const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
 const param = ref({
   pgno: 1,
+  spp: VITE_ARTICLE_LIST_SIZE,
   key: "",
   word: "",
 });
@@ -19,21 +31,34 @@ onMounted(() => {
   getArticleList();
 });
 
+const changeKey = (val) => {
+  console.log("BoarList에서 선택한 조건 : " + val);
+  param.value.key = val;
+};
+
 const getArticleList = () => {
-  console.log("글 목록 얻어오기", param.value);
+  // console.log("글 목록 얻어오기", param.value);
   // API 호출
   listArticle(
     param.value,
     ({ data }) => {
       console.log("data : " + data);
       //   articles.value = data;
-      articles.value = data;
-      console.log(articles.value);
+      articles.value = data.articles;
+      currentPage.value = data.currentPage;
+      totalPage.value = data.totalPageCount;
     },
     (error) => {
       console.log(error);
     }
   );
+};
+
+const onPageChange = (val) => {
+  // console.log(val + "번 페이지로 이동 준비 끝!!!");
+  currentPage.value = val;
+  param.value.pgno = val;
+  getArticleList();
 };
 
 const moveWrite = () => {
@@ -61,20 +86,8 @@ const moveWrite = () => {
           </button>
         </div>
         <div class="col-md-7 offset-3">
-          <form class="d-flex" id="form-search" action="">
-            <input type="hidden" name="action" value="list" />
-            <input type="hidden" name="pgno" value="1" />
-            <select
-              name="key"
-              id="key"
-              class="form-select form-select-sm ms-5 me-1 w-50"
-              aria-label="검색조건"
-            >
-              <option value="" selected>검색조건</option>
-              <option value="article_no">글번호</option>
-              <option value="subject">제목</option>
-              <option value="user_id">작성자</option>
-            </select>
+          <form class="d-flex">
+            <VSelect :selectOption="selectOption" @onKeySelect="changeKey" />
             <div class="input-group input-group-sm">
               <input
                 type="text"
@@ -82,8 +95,9 @@ const moveWrite = () => {
                 id="word"
                 class="form-control"
                 placeholder="검색어..."
+                v-model="param.word"
               />
-              <button id="btn-search" class="btn btn-dark" type="button">
+              <button id="btn-search" class="btn btn-dark" type="button" @click="getArticleList">
                 검색
               </button>
             </div>
@@ -101,16 +115,16 @@ const moveWrite = () => {
           </tr>
         </thead>
         <tbody>
-          <BoardListItem
-            v-for="article in articles"
-            :key="article.acticleNo"
-            :article="article"
-          >
+          <BoardListItem v-for="article in articles" :key="article.acticleNo" :article="article">
           </BoardListItem>
         </tbody>
       </table>
     </div>
-    <!-- <div class="row">${navigation.navigator}</div> -->
+    <VPageNavigation
+      :current-page="currentPage"
+      :total-page="totalPage"
+      @pageChange="onPageChange"
+    ></VPageNavigation>
   </div>
 </template>
 

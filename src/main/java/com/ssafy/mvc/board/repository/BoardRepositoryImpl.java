@@ -60,4 +60,9 @@ public class BoardRepositoryImpl implements BoardRepository {
     public void addReply(ReplyDto replyDto) throws SQLException {
         session.insert(ns + "addReply", replyDto);
     }
+
+	@Override
+	public List<ReplyDto> listReply(int articleNo) throws SQLException {
+		return session.selectList(ns+"listReply", articleNo);
+	}
 }

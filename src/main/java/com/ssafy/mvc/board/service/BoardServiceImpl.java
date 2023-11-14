@@ -1,6 +1,7 @@
 package com.ssafy.mvc.board.service;
 
 import com.ssafy.mvc.board.dto.BoardDto;
+import com.ssafy.mvc.board.dto.BoardListDto;
 import com.ssafy.mvc.board.dto.ReplyDto;
 import com.ssafy.mvc.board.repository.BoardRepository;
 import com.ssafy.mvc.util.PageNavigation;
@@ -28,19 +29,33 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardDto> listArticle(Map<String, String> map) throws Exception {
+	public BoardListDto listArticle(Map<String, String> map) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
 		System.out.println(map);
+		param.put("word", map.get("word") == null ? "" : map.get("word"));
+		int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
+		int sizePerPage = Integer.parseInt(map.get("spp") == null ? "20" : map.get("spp"));
+		int start = currentPage * sizePerPage - sizePerPage;
+		param.put("start", start);
+		param.put("listsize", sizePerPage);
+		
+		
 		String key = map.get("key");
 //		if("userid".equals(key))
 //			key = "user_id";
 		param.put("key", key.isEmpty() ? "" : key);
-		param.put("word", map.get("word").isEmpty() ? "" : map.get("word"));
-		int pgno = Integer.parseInt(map.get("pgno"));
-		int start = pgno * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
-		param.put("start", start);
-		param.put("listsize", SizeConstant.LIST_SIZE);
-		return boardRepository.listArticle(param);
+//		int pgno = Integer.parseInt(map.get("pgno"));
+//		int start = pgno * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
+
+		List<BoardDto> list = boardRepository.listArticle(param);
+		int totalArticleCount = boardRepository.getTotalArticleCount(param);
+		int totalPageCount = (totalArticleCount - 1) / sizePerPage + 1;
+		
+		BoardListDto boardListDto = new BoardListDto();
+		boardListDto.setArticles(list);
+		boardListDto.setCurrentPage(currentPage);
+		boardListDto.setTotalPageCount(totalPageCount);
+		return boardListDto;
 	}
 	
 	@Override
@@ -74,7 +89,10 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardDto getArticle(int articleNo) throws Exception {
-		return boardRepository.getArticle(articleNo);
+		BoardDto boardDto = boardRepository.getArticle(articleNo);
+		List<ReplyDto> replyList = boardRepository.listReply(articleNo);
+		boardDto.setReplies(replyList);
+		return boardDto;
 	}
 
 	@Override
